@@ -39,7 +39,6 @@ class App extends Component {
         <Header />
         <ChatHistory history={this.state.chatHistory} />
         <ChatInput send={this.send} />
-        <button onClick={this.send}>Send</button>
       </div>
     );
   }
