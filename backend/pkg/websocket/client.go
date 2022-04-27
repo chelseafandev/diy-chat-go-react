@@ -3,6 +3,8 @@ package websocket
 import (
 	"fmt"
 	"log"
+	"bytes"
+	"encoding/json"
 
 	"github.com/gorilla/websocket"
 )
@@ -17,8 +19,9 @@ type Client struct {
 }
 
 type Message struct {
-	Type int    `json:"type"`
-	Body string `json:"body"`
+	Type string `json:"type"`
+	User string `json:"user"`
+	Text string `json:"text"`
 }
 
 func (c *Client) Read() {
@@ -28,13 +31,29 @@ func (c *Client) Read() {
 	}()
 
 	for {
-		messageType, p, err := c.Conn.ReadMessage()
+		var message Message
+
+		_, p, err := c.Conn.ReadMessage()
 		if err != nil {
 			log.Println(err)
 			return
 		}
-
-		message := Message{Type: messageType, Body: string(p)}
+		var msg = Message{}
+		err2 := json.Unmarshal([]byte(string(p)), &msg)
+		if err2 != nil {
+			fmt.Println("Failed to json.Unmarshal")
+			message = Message{Type: "message", User: c.ID, Text: string(p)}
+		} else {
+			if msg.Type == "join" {
+				c.ID = msg.User
+				var tmpText bytes.Buffer
+				tmpText.WriteString("`")
+				tmpText.WriteString(c.ID)
+				tmpText.WriteString("` joined...")
+				message = Message{Type: "admin", User: "admin", Text: tmpText.String()}
+			}
+		}
+		
 		c.Pool.Broadcast <- message
 		fmt.Printf("Message Received: %+v\n", message)
 	}

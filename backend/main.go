@@ -9,6 +9,7 @@ import (
 
 func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	fmt.Println("WebSocket Endpoint Hit")
+
 	// 현재 http connection을 websocket connection으로 업그레이드해주는 작업(`gorilla/websocket` 패키지에서 제공해주고있음)
 	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
@@ -25,6 +26,7 @@ func serveWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 }
 
 func setupRoutes() {
+	// Pool: 세션 정보를 관리하는 객체
 	pool := websocket.NewPool()
 	go pool.Start()
 
