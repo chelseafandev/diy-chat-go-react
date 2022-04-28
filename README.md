@@ -18,6 +18,7 @@ Distributed Chat App v0.01
 ```
 # cd diy-chat-go-react
 # cd frontend_insta
+# sudo npm i react-scripts
 # npm start
 ```
 
