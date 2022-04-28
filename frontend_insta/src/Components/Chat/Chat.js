@@ -35,7 +35,7 @@ function Chat({ location }) {
                 JSON.stringify({
                     type: "join",
                     user: name,
-                    text: "join",
+                    text: room,
                 })
             );
         };
