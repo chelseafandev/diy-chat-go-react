@@ -34,8 +34,9 @@ function Chat({ location }) {
             socket.send(
                 JSON.stringify({
                     type: "join",
+                    room: room,
                     user: name,
-                    text: room,
+                    text: "join",
                 })
             );
         };
@@ -58,11 +59,15 @@ function Chat({ location }) {
                 case "message":
                     setMessages((messages) => [...messages, data]);
                     break;
-                case "admin":
+                case "register":
                     setMessages((messages) => [...messages, data]);
+                    console.log(data)
+                    break;
+                case "unregister":
+                    setMessages((messages) => [...messages, data]);
+                    console.log(data)
                     break;
                 default:
-                    
                     break;
             }
 
