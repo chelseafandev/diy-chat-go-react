@@ -1,10 +1,10 @@
 package websocket
 
 import (
-	"fmt"
-	"log"
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"log"
 
 	"github.com/gorilla/websocket"
 )
@@ -24,6 +24,14 @@ type Message struct {
 	Room string `json:"room"`
 	User string `json:"user"`
 	Text string `json:"text"`
+}
+
+type RegisterMessage struct {
+	Type  string   `json:"type"`
+	Room  string   `json:"room"`
+	User  string   `json:"user"`
+	Text  string   `json:"text"`
+	Users []string `json:"users"`
 }
 
 func (c *Client) Read() {
@@ -61,7 +69,7 @@ func (c *Client) Read() {
 				tmpText.WriteString("` joined...")
 			}
 		}
-		
+
 		c.Pool.Broadcast <- message
 		fmt.Printf("Message Received: %+v\n", message)
 	}

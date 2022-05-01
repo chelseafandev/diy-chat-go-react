@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import queryString from "query-string";
-import io from "socket.io-client";
 import InfoBar from "../Infobar/Infobar";
 import Input from "../Input/Input";
 import "./Chat.css";
@@ -40,7 +39,7 @@ function Chat({ location }) {
                 })
             );
         };
-
+        
         // 컴포넌트가 화면에서 사라짐
         return () => {
             socket.close(1000, "socket close...");
@@ -50,8 +49,6 @@ function Chat({ location }) {
 
     useEffect(() => {
         socket.onmessage = function(event) {
-            const { name, room } = queryString.parse(location.search);
-
             const data = JSON.parse(event.data);
             console.log("[onmessage] received message...");
             
@@ -61,19 +58,26 @@ function Chat({ location }) {
                     break;
                 case "register":
                     setMessages((messages) => [...messages, data]);
-                    console.log(data)
+                    console.log(data.users)
+                    setUsers("");
+                    for (let i = 0; i < Object.keys(data.users).length; i++) {
+                        setUsers((users) => [...users, data.users[i]]);
+                    }
+                    
                     break;
                 case "unregister":
                     setMessages((messages) => [...messages, data]);
-                    console.log(data)
+                    console.log(data.users)
+                    setUsers("");
+                    for (let i = 0; i < Object.keys(data.users).length; i++) {
+                        setUsers((users) => [...users, data.users[i]]);
+                    }
                     break;
                 default:
                     break;
             }
-
-            
         };
-    }, [messages, location.search]);
+    }, [users, messages]);
 
     function sendMessage(event) {
         event.preventDefault();
