@@ -25,6 +25,10 @@ Distributed Chat App v0.01
 <br>
 <br>
 
+<img src="/resource/chat-demo.gif" />
+
+<br>
+
 **reference**
 - https://tutorialedge.net/projects/chat-system-in-go-and-react/
 - https://github.com/m6un/insta-chat
